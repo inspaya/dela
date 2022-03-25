@@ -1,9 +1,31 @@
 from secrets import token_hex
 from flask import Flask, request
+from markupsafe import escape
 from expiringdict import ExpiringDict
 
+CACHE_MAX_LEN = 1000
+CACHE_MAX_AGE_SECS = 604800
+
 app = Flask(__name__)
-cache = ExpiringDict(max_len=1000, max_age_seconds=604800)
+
+
+def _create_cache(cache_max_len=CACHE_MAX_LEN, cache_max_age=CACHE_MAX_AGE_SECS):
+    return ExpiringDict(max_len=cache_max_len, max_age_seconds=cache_max_age)
+
+
+def _create_and_store_message(message):
+    message_id = token_hex()
+    cache[message_id] = message
+    return message_id
+
+
+def _get_message_by_id(message_id):
+    if message_id in cache.keys():
+        return cache.get(message_id)
+    return f"Message with id {message_id} not found"
+
+
+cache = _create_cache()
 
 
 @app.route("/messages/new", methods=['POST'])
@@ -20,16 +42,4 @@ def create_message():
 @app.route("/messages/view/<message_id>", methods=['GET'])
 def view_message(message_id):
     message = _get_message_by_id(message_id)
-    return f"{message}"
-
-
-def _create_and_store_message(message):
-    message_id = token_hex()
-    cache[message_id] = message
-    return message_id
-
-
-def _get_message_by_id(message_id):
-    if message_id in cache.keys():
-        return cache.get(message_id)
-    return f"Message with id {message_id} not found"
+    return f"{escape(message)}"

@@ -20,7 +20,7 @@ limiter = Limiter(
 
 
 def _create_cache(cache_max_len=CACHE_MAX_LEN, cache_max_age=CACHE_MAX_AGE_SECS):
-    return ExpiringDict(max_len=cache_max_len, max_age_seconds=cache_max_age)
+    return ExpiringDict(max_len=int(cache_max_len), max_age_seconds=int(cache_max_age))
 
 
 def _create_and_store_message(message):

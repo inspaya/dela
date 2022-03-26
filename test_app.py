@@ -2,6 +2,7 @@ import pytest
 from expiringdict import ExpiringDict
 from app import app as flask_app, cache, _create_and_store_message, \
     _create_cache, _get_message_by_id, limiter, CACHE_MAX_LEN, CACHE_MAX_AGE_SECS, DEFAULT_RATE_LIMIT
+from markupsafe import escape
 
 
 @pytest.fixture
@@ -22,6 +23,20 @@ def test_create_message_succeeds_and_returns_http_201(client):
 
     assert response.status_code == 201
     assert "New message created. Available at" in response.get_data(True)
+
+
+def test_create_message_fails_and_returns_http_400_for_a_bad_payload(client):
+    """
+    GIVEN a request with a json payload missing the "message" key
+    WHEN the '/messages/new' endpoint is POSTed to
+    THEN check that an error message is returned along with HTTP 400
+    """
+    response = client.post(
+        path="/messages/new", json={"problem": "I don't have a message key"}
+    )
+
+    assert response.status_code == 400
+    assert response.get_data(True) == "Please provide a message to be created"
 
 
 def test_create_cache_works_correctly():
@@ -63,7 +78,25 @@ def test_get_message_by_id_returns_errors_for_invalid_ids():
     assert response_code == 404
 
 
-def test_create_and_store_message(client):
+def test_get_message_by_id_escapes_html_content(client):
+    """
+    GIVEN a valid id referencing HTML message content
+    WHEN the in-memory cache is queried for this id
+    THEN check that the HTML message content is escaped before display
+    """
+    message_text = "<script>alert('Busted!')</script>"
+    post_response = client.post(
+        path="/messages/new", json={"message": message_text}
+    )
+
+    message_id = post_response.get_data(True).split('messages/view/')[1]
+    get_response = client.get(path=f"/messages/view/{message_id}")
+
+    assert f"{escape(message_text)}" == get_response.get_data(True)
+    assert get_response.status_code == 200
+
+
+def test_create_and_store_message():
     """
     GIVEN a message
     WHEN the _create_and_store_message() function is called with that 'message'
@@ -79,7 +112,7 @@ def test_create_and_store_message(client):
     assert message_id in message_ids_matched
 
 
-def test_create_and_store_message_enforces_unique_urls(client):
+def test_create_and_store_message_enforces_unique_urls():
     """
     GIVEN two or more similar messages
     WHEN the _create_and_store_message() function is called with each 'message' separately

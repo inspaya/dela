@@ -1,5 +1,6 @@
 *.notes
 __pycache__/
+.coverage
 .idea/
 .git/
 bin/

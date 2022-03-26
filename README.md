@@ -33,7 +33,7 @@ This project can be setup using any of the following techniques:
   $ # To run tests, execute
   $ pytest test_app.py
   $ # .. or if you want to see test coverage reports, execute
-  $ coverage report test_app.py
+  $ coverage report app.py
   ```
 * Using Docker
 

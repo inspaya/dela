@@ -52,9 +52,9 @@ def test_get_message_by_id_returns_messages_for_valid_ids():
 
 def test_get_message_by_id_returns_errors_for_invalid_ids():
     """
-    GIVEN an id
+    GIVEN an in-existent id
     WHEN the in-memory cache is queried for this id
-    THEN the associated message should be returned
+    THEN an error message should be returned
     """
     message_id = "Some_fake_id_that_never_got_created"
     message, response_code = _get_message_by_id(message_id)

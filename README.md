@@ -33,9 +33,27 @@ This project can be setup using any of the following techniques:
   $ # To run tests, execute
   $ pytest test_app.py
   $ # .. or if you want to see test coverage reports, execute
-  $ coverage report app.py
+  $ coverage run app.py && coverage report app.py
   ```
 * Using Docker
+  1. Build the docker image
+  2. Run a container and issue requests.
+  3. Optionally run the tests
+  ```shell
+  $ docker build -t inspaya-dela .
+  $ docker run -p 5000:5000 --name dela -it --rm --init inspaya-dela
+  $ # To add a message, execute
+  $ curl -X POST 'http://127.0.0.1:5000/messages/new' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{"message":"What a beautiful day"}'
+  $ # To view a message, execute
+  $ curl http://127.0.0.1:5000/messages/view/<ID_RETURNED_FROM_THE_POST_REQUEST>
+  $ # To run tests, execute
+  $ docker exec -it <insert_container_id_here> pytest test_app.py
+  $ # Generate Unit Test Coverage for the app.py script
+  $ docker exec -it <insert_container_id_here> coverage run app.py
+  $ docker exec -it <insert_container_id_here> coverage report app.py
+  ```
 
 ## Design Notes
 

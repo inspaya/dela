@@ -36,10 +36,13 @@ This project can be setup using any of the following techniques:
   $ coverage run app.py && coverage report app.py
   ```
 * Using Docker
-  1. Build the docker image
-  2. Run a container and issue requests.
-  3. Optionally run the tests
+  1. Clone this repo
+  2. Build the docker image
+  3. Run a container and issue requests.
+  4. Optionally run the tests
   ```shell
+  $ git clone https://github.com/inspaya/dela.git
+  $ cd dela
   $ docker build -t inspaya-dela .
   $ docker run -p 5000:5000 --name dela -it --rm --init inspaya-dela
   $ # To add a message, execute

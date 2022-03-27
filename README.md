@@ -1,3 +1,5 @@
+[![inspaya](https://circleci.com/gh/inspaya/dela.svg?style=svg)](https://app.circleci.com/pipelines/github/inspaya/dela)
+
 # Dela (pronounced "D" "ela", swedish word for "share")
 
 Message sharing system with the following features:

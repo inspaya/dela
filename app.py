@@ -52,7 +52,7 @@ def create_message():
         message_id = _create_and_store_message(message)
         message_url = f"{request.host_url}messages/view/{message_id}"
         return f"\nNew message created. Available at {message_url}", 201
-    return f"Please provide a message to be created", 400
+    return "Please provide a message to be created", 400
 
 
 @app.route("/messages/view/<message_id>", methods=['GET'])

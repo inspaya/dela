@@ -1,3 +1,5 @@
+[![Ceasefire Now](https://badge.techforpalestine.org/ceasefire-now)](https://techforpalestine.org/learn-more)
+
 [![inspaya](https://circleci.com/gh/inspaya/dela.svg?style=svg)](https://app.circleci.com/pipelines/github/inspaya/dela)
 
 # Dela (pronounced "D" "ela", swedish word for "share")

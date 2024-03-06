@@ -1,4 +1,4 @@
-Flask==2.0.3
+Flask==2.2.5
 Flask-Limiter==2.2.0
 flake8==4.0.1
 expiringdict==1.2.1

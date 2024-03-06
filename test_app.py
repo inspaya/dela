@@ -1,4 +1,7 @@
 import pytest
+from os import environ
+from time import sleep
+from unittest.mock import Mock, patch
 from expiringdict import ExpiringDict
 from app import app as flask_app, cache, _create_and_store_message, \
     _create_cache, _get_message_by_id, limiter, CACHE_MAX_LEN, CACHE_MAX_AGE_SECS, DEFAULT_RATE_LIMIT
@@ -118,17 +121,17 @@ def test_create_and_store_message_enforces_unique_urls():
     WHEN the _create_and_store_message() function is called with each 'message' separately
     THEN check that a unique id (which is part of the URL) is created and stored for each message
     """
-    message_text1 = "Message to test creating and storing with unique ids"
-    message_text2 = "Message to test creating and storing with unique ids"
-    message_text3 = "Message to test creating and storing with unique ids"
+    dipo = "End game"
+    sophie = "End game"
+    moyin = "End game"
 
-    message_id1 = _create_and_store_message(message_text1)
-    message_id2 = _create_and_store_message(message_text2)
-    message_id3 = _create_and_store_message(message_text3)
+    message_id1 = _create_and_store_message(dipo)
+    message_id2 = _create_and_store_message(sophie)
+    message_id3 = _create_and_store_message(moyin)
 
     message_ids_matched = []
     for unique_id, message in cache.items():
-        if message_text1 == message or message_text2 == message or message_text3 == message:
+        if dipo == message or sophie == message or moyin == message:
             message_ids_matched.append(unique_id)
 
     assert message_id1 in message_ids_matched
